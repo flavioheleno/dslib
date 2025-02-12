@@ -1,0 +1,49 @@
+name: PHP Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  pipeline:
+    name: PHP ${{ matrix.php-version }}
+    runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version:
+          - '8.4'
+        experimental:
+          - false
+        include:
+          - php-version: '8.5'
+            experimental: true
+
+    steps:
+    - name: Repository checkout
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+    - name: Setup PHP ${{ matrix.php-version }}
+      uses: shivammathur/setup-php@9e72090525849c5e82e596468b86eb55e9cc5401 # v2.32.0
+      with:
+        php-version: ${{ matrix.php-version }}
+        tools: composer:v2
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate --strict
+
+    - name: Install dependencies
+      uses: ramsey/composer-install@57532f8be5bda426838819c5ee9afb8af389d51a # v3.0.0
+      with:
+        dependency-versions: lowest
+
+    - name: Run PHPUnit
+      run: vendor/bin/phpunit tests/
