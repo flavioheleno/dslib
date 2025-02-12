@@ -39,8 +39,18 @@ class FloatList implements FloatCollectionInterface {
     $this->data = [];
   }
 
-  public function diff(FloatCollectionInterface $collection): static {
-    return new static(...array_diff($this->data, $collection->toArray()));
+  public function diff(FloatCollectionInterface ...$collections): static {
+    return new static(
+      ...array_diff(
+        $this->data,
+        ...array_map(
+          static function (FloatCollectionInterface $collection): array {
+            return $collection->toArray();
+          },
+          $collections
+        )
+      )
+    );
   }
 
   /**
@@ -54,8 +64,18 @@ class FloatList implements FloatCollectionInterface {
     return in_array($value, $this->data, true);
   }
 
-  public function intersect(FloatCollectionInterface $collection): static {
-    return new static(...array_intersect($this->data, $collection->toArray()));
+  public function intersect(FloatCollectionInterface ...$collections): static {
+    return new static(
+      ...array_intersect(
+        $this->data,
+        ...array_map(
+          static function (FloatCollectionInterface $collection): array {
+            return $collection->toArray();
+          },
+          $collections
+        )
+      )
+    );
   }
 
   /**
@@ -65,8 +85,16 @@ class FloatList implements FloatCollectionInterface {
     return new static(...array_map($callback, $this->data));
   }
 
-  public function merge(FloatCollectionInterface $collection): self {
-    $this->data = array_merge($this->data, $collection->toArray());
+  public function merge(FloatCollectionInterface ...$collections): self {
+    $this->data = array_merge(
+      $this->data,
+      ...array_map(
+        static function (FloatCollectionInterface $collection): array {
+          return $collection->toArray();
+        },
+        $collections
+      )
+    );
 
     return $this;
   }

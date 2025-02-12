@@ -7,18 +7,20 @@ use DsLib\Contract\StringCollectionInterface;
 use DsLib\List\StringList;
 
 class StringSet extends StringList {
-  public function __construct(string ...$strings) {
+  public function __construct(string ...$values) {
     $this->data = [];
 
-    foreach ($strings as $string) {
-      $this->push($string);
+    foreach ($values as $value) {
+      $this->push($value);
     }
   }
 
   /** Array Methods **/
-  public function merge(StringCollectionInterface $set): self {
-    foreach ($set as $string) {
-      $this->push($string);
+  public function merge(StringCollectionInterface ...$collections): self {
+    foreach ($collections as $collection) {
+      foreach ($collection as $value) {
+        $this->push($value);
+      }
     }
 
     return $this;

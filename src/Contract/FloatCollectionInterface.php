@@ -17,18 +17,18 @@ interface FloatCollectionInterface extends Countable, Iterator {
    */
   public function any(callable $callback): bool;
   public function clear(): void;
-  public function diff(FloatCollectionInterface $collection): static;
+  public function diff(FloatCollectionInterface ...$collections): static;
   /**
    * @param callable(float):bool $callback
    */
   public function filter(callable $callback): static;
   public function has(float $value): bool;
-  public function intersect(FloatCollectionInterface $collection): static;
+  public function intersect(FloatCollectionInterface ...$collections): static;
   /**
    * @param callable(float):bool $callback
    */
   public function map(callable $callback): static;
-  public function merge(FloatCollectionInterface $collection): self;
+  public function merge(FloatCollectionInterface ...$collections): self;
   public function pop(): float;
   public function push(float $value): self;
   public function rsort(): void;

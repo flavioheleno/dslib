@@ -7,18 +7,20 @@ use DsLib\Contract\IntCollectionInterface;
 use DsLib\List\IntList;
 
 class IntSet extends IntList {
-  public function __construct(int ...$ints) {
+  public function __construct(int ...$values) {
     $this->data = [];
 
-    foreach ($ints as $int) {
-      $this->push($int);
+    foreach ($values as $value) {
+      $this->push($value);
     }
   }
 
   /** Array Methods **/
-  public function merge(IntCollectionInterface $set): self {
-    foreach ($set as $int) {
-      $this->push($int);
+  public function merge(IntCollectionInterface ...$collections): self {
+    foreach ($collections as $collection) {
+      foreach ($collection as $value) {
+        $this->push($value);
+      }
     }
 
     return $this;

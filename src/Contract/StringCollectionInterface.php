@@ -17,19 +17,19 @@ interface StringCollectionInterface extends Countable, Iterator {
    */
   public function any(callable $callback): bool;
   public function clear(): void;
-  public function diff(StringCollectionInterface $collection): static;
+  public function diff(StringCollectionInterface ...$collections): static;
   /**
    * @param callable(string):bool $callback
    */
   public function filter(callable $callback): static;
   public function has(string $value): bool;
-  public function intersect(StringCollectionInterface $collection): static;
+  public function intersect(StringCollectionInterface ...$collections): static;
   public function join(string $separator): string;
   /**
    * @param callable(int):bool $callback
    */
   public function map(callable $callback): static;
-  public function merge(StringCollectionInterface $collection): self;
+  public function merge(StringCollectionInterface ...$collections): self;
   public function pop(): string;
   public function push(string $value): self;
   public function rsort(): void;

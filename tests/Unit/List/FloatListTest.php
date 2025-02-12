@@ -53,7 +53,13 @@ final class FloatListTest extends TestCase {
     $diff = $list->diff(new FloatList(0.2, 0.3));
     $this->assertEquals([0.1, 0.4], $diff->toArray());
 
+    $diff = $list->diff(new FloatList(0.2), new FloatList(0.3));
+    $this->assertEquals([0.1, 0.4], $diff->toArray());
+
     $diff = $list->diff(new FloatList(0.1, 0.2, 0.3, 0.4));
+    $this->assertEmpty($diff->toArray());
+
+    $diff = $list->diff(new FloatList(0.1, 0.2), new FloatList(0.3, 0.4));
     $this->assertEmpty($diff->toArray());
   }
 

@@ -39,8 +39,18 @@ class StringList implements StringCollectionInterface {
     $this->data = [];
   }
 
-  public function diff(StringCollectionInterface $collection): static {
-    return new static(...array_diff($this->data, $collection->toArray()));
+  public function diff(StringCollectionInterface ...$collections): static {
+    return new static(
+      ...array_diff(
+        $this->data,
+        ...array_map(
+          static function (StringCollectionInterface $collection): array {
+            return $collection->toArray();
+          },
+          $collections
+        )
+      )
+    );
   }
 
   /**
@@ -54,8 +64,18 @@ class StringList implements StringCollectionInterface {
     return in_array($value, $this->data, true);
   }
 
-  public function intersect(StringCollectionInterface $collection): static {
-    return new static(...array_intersect($this->data, $collection->toArray()));
+  public function intersect(StringCollectionInterface ...$collections): static {
+    return new static(
+      ...array_intersect(
+        $this->data,
+        ...array_map(
+          static function (StringCollectionInterface $collection): array {
+            return $collection->toArray();
+          },
+          $collections
+        )
+      )
+    );
   }
 
   public function join(string $separator): string {
@@ -69,8 +89,16 @@ class StringList implements StringCollectionInterface {
     return new static(...array_map($callback, $this->data));
   }
 
-  public function merge(StringCollectionInterface $collection): self {
-    $this->data = array_merge($this->data, $collection->toArray());
+  public function merge(StringCollectionInterface ...$collections): self {
+    $this->data = array_merge(
+      $this->data,
+      ...array_map(
+        static function (StringCollectionInterface $collection): array {
+          return $collection->toArray();
+        },
+        $collections
+      )
+    );
 
     return $this;
   }

@@ -53,7 +53,13 @@ final class IntListTest extends TestCase {
     $diff = $list->diff(new IntList(2, 3));
     $this->assertEquals([1, 4], $diff->toArray());
 
+    $diff = $list->diff(new IntList(2), new IntList(3));
+    $this->assertEquals([1, 4], $diff->toArray());
+
     $diff = $list->diff(new IntList(1, 2, 3, 4));
+    $this->assertEmpty($diff->toArray());
+
+    $diff = $list->diff(new IntList(1, 2), new IntList(3, 4));
     $this->assertEmpty($diff->toArray());
   }
 

@@ -39,8 +39,18 @@ class IntList implements IntCollectionInterface {
     $this->data = [];
   }
 
-  public function diff(IntCollectionInterface $collection): static {
-    return new static(...array_diff($this->data, $collection->toArray()));
+  public function diff(IntCollectionInterface ...$collections): static {
+    return new static(
+      ...array_diff(
+        $this->data,
+        ...array_map(
+          static function (IntCollectionInterface $collection): array {
+            return $collection->toArray();
+          },
+          $collections
+        )
+      )
+    );
   }
 
   /**
@@ -54,8 +64,18 @@ class IntList implements IntCollectionInterface {
     return in_array($value, $this->data, true);
   }
 
-  public function intersect(IntCollectionInterface $collection): static {
-    return new static(...array_intersect($this->data, $collection->toArray()));
+  public function intersect(IntCollectionInterface ...$collections): static {
+    return new static(
+      ...array_intersect(
+        $this->data,
+        ...array_map(
+          static function (IntCollectionInterface $collection): array {
+            return $collection->toArray();
+          },
+          $collections
+        )
+      )
+    );
   }
 
   /**
@@ -65,8 +85,16 @@ class IntList implements IntCollectionInterface {
     return new static(...array_map($callback, $this->data));
   }
 
-  public function merge(IntCollectionInterface $collection): self {
-    $this->data = array_merge($this->data, $collection->toArray());
+  public function merge(IntCollectionInterface ...$collections): self {
+    $this->data = array_merge(
+      $this->data,
+      ...array_map(
+        static function (IntCollectionInterface $collection): array {
+          return $collection->toArray();
+        },
+        $collections
+      )
+    );
 
     return $this;
   }

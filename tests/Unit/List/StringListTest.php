@@ -53,7 +53,13 @@ final class StringListTest extends TestCase {
     $diff = $list->diff(new StringList('c', 'd'));
     $this->assertEquals(['b', 'e'], $diff->toArray());
 
+    $diff = $list->diff(new StringList('c'), new StringList('d'));
+    $this->assertEquals(['b', 'e'], $diff->toArray());
+
     $diff = $list->diff(new StringList('b', 'c', 'd', 'e'));
+    $this->assertEmpty($diff->toArray());
+
+    $diff = $list->diff(new StringList('b', 'c'), new StringList('d', 'e'));
     $this->assertEmpty($diff->toArray());
   }
 

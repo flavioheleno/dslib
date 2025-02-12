@@ -17,18 +17,18 @@ interface IntCollectionInterface extends Countable, Iterator {
    */
   public function any(callable $callback): bool;
   public function clear(): void;
-  public function diff(IntCollectionInterface $collection): static;
+  public function diff(IntCollectionInterface ...$collections): static;
   /**
    * @param callable(int):bool $callback
    */
   public function filter(callable $callback): static;
   public function has(int $value): bool;
-  public function intersect(IntCollectionInterface $collection): static;
+  public function intersect(IntCollectionInterface ...$collections): static;
   /**
    * @param callable(int):bool $callback
    */
   public function map(callable $callback): static;
-  public function merge(IntCollectionInterface $collection): self;
+  public function merge(IntCollectionInterface ...$collections): self;
   public function pop(): int;
   public function push(int $value): self;
   public function rsort(): void;

@@ -7,18 +7,20 @@ use DsLib\Contract\FloatCollectionInterface;
 use DsLib\List\FloatList;
 
 class FloatSet extends FloatList {
-  public function __construct(float ...$floats) {
+  public function __construct(float ...$values) {
     $this->data = [];
 
-    foreach ($floats as $float) {
-      $this->push($float);
+    foreach ($values as $value) {
+      $this->push($value);
     }
   }
 
   /** Array Methods **/
-  public function merge(FloatCollectionInterface $set): self {
-    foreach ($set as $float) {
-      $this->push($float);
+  public function merge(FloatCollectionInterface ...$collections): self {
+    foreach ($collections as $collection) {
+      foreach ($collection as $value) {
+        $this->push($value);
+      }
     }
 
     return $this;
