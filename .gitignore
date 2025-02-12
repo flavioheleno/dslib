@@ -1,0 +1,5 @@
+.phpunit.cache
+composer.phar
+/vendor/
+composer.lock
+tests/Report/

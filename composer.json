@@ -1,0 +1,47 @@
+{
+  "name": "flavioheleno/dslib",
+  "description": "An ordinary typed data structure library",
+  "type": "library",
+  "license": "MIT",
+  "keywords": [
+    "string list",
+    "int list",
+    "float list",
+    "string set",
+    "int set",
+    "float set",
+    "data structure"
+  ],
+  "authors": [
+    {
+      "name": "Flavio Heleno",
+      "email": "flaviohbatista@gmail.com",
+      "homepage": "https://flavioheleno.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "DsLib\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "DsLib\\Test\\": "tests/"
+    }
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "sort-packages": true,
+    "preferred-install": "dist",
+    "allow-plugins": {
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "require": {
+    "php": "^8.1"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^12.0"
+  }
+}
