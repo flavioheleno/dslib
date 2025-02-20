@@ -7,6 +7,10 @@ use Countable;
 use Iterator;
 
 interface StringCollectionInterface extends Countable, Iterator {
+  /**
+   * @param list<string> $array
+   */
+  public static function fromArray(array $array): static;
   public function isEmpty(): bool;
   /**
    * @param callable(string,int):bool $callback

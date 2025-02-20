@@ -4,11 +4,26 @@ declare(strict_types = 1);
 namespace DsLib\Test\Unit\List;
 
 use DsLib\List\StringList;
+use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(StringList::class)]
 final class StringListTest extends TestCase {
+  public function testFromInvalidArray(): void {
+    $this->expectException(InvalidArgumentException::class);
+    $this->expectExceptionMessage('$array must only contain string values');
+
+    StringList::fromArray(['a', 1]);
+  }
+
+  public function testFromArray(): void {
+    $arr = ['a', 'b'];
+    $list = StringList::fromArray($arr);
+
+    $this->assertEquals($arr, $list->toArray());
+  }
+
   public function testEmptyList(): void {
     $list = new StringList();
 

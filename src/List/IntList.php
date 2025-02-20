@@ -4,12 +4,30 @@ declare(strict_types = 1);
 namespace DsLib\List;
 
 use DsLib\Contract\IntCollectionInterface;
+use InvalidArgumentException;
 
 class IntList implements IntCollectionInterface {
   /**
    * @var list<int>
    */
   protected array $data;
+
+  /**
+   * @param list<int> $array
+   */
+  public static function fromArray(array $array): static {
+    $invalid = array_filter(
+      $array,
+      static function (mixed $value): bool {
+        return is_int($value) === false;
+      }
+    );
+    if ($invalid !== []) {
+      throw new InvalidArgumentException('$array must only contain integer values');
+    }
+
+    return new static(...$array);
+  }
 
   public function __construct(int ...$ints) {
     $this->data = $ints;

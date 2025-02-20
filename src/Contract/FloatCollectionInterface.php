@@ -7,6 +7,10 @@ use Countable;
 use Iterator;
 
 interface FloatCollectionInterface extends Countable, Iterator {
+  /**
+   * @param list<float> $array
+   */
+  public static function fromArray(array $array): static;
   public function isEmpty(): bool;
   /**
    * @param callable(float,float):bool $callback

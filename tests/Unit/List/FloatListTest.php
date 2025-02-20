@@ -4,11 +4,26 @@ declare(strict_types = 1);
 namespace DsLib\Test\Unit\List;
 
 use DsLib\List\FloatList;
+use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(FloatList::class)]
 final class FloatListTest extends TestCase {
+  public function testFromInvalidArray(): void {
+    $this->expectException(InvalidArgumentException::class);
+    $this->expectExceptionMessage('$array must only contain float values');
+
+    FloatList::fromArray([0.1, 'a']);
+  }
+
+  public function testFromArray(): void {
+    $arr = [0.1, 0.2];
+    $list = FloatList::fromArray($arr);
+
+    $this->assertEquals($arr, $list->toArray());
+  }
+
   public function testEmptyList(): void {
     $list = new FloatList();
 

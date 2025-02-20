@@ -7,6 +7,10 @@ use Countable;
 use Iterator;
 
 interface IntCollectionInterface extends Countable, Iterator {
+  /**
+   * @param list<int> $array
+   */
+  public static function fromArray(array $array): static;
   public function isEmpty(): bool;
   /**
    * @param callable(int,int):bool $callback

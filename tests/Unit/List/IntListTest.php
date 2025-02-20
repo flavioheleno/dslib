@@ -4,11 +4,26 @@ declare(strict_types = 1);
 namespace DsLib\Test\Unit\List;
 
 use DsLib\List\IntList;
+use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(IntList::class)]
 final class IntListTest extends TestCase {
+  public function testFromInvalidArray(): void {
+    $this->expectException(InvalidArgumentException::class);
+    $this->expectExceptionMessage('$array must only contain integer values');
+
+    IntList::fromArray([1, 'b']);
+  }
+
+  public function testFromArray(): void {
+    $arr = [1, 2];
+    $list = IntList::fromArray($arr);
+
+    $this->assertEquals($arr, $list->toArray());
+  }
+
   public function testEmptyList(): void {
     $list = new IntList();
 

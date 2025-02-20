@@ -4,12 +4,30 @@ declare(strict_types = 1);
 namespace DsLib\List;
 
 use DsLib\Contract\FloatCollectionInterface;
+use InvalidArgumentException;
 
 class FloatList implements FloatCollectionInterface {
   /**
    * @var list<float>
    */
   protected array $data;
+
+  /**
+   * @param list<float> $array
+   */
+  public static function fromArray(array $array): static {
+    $invalid = array_filter(
+      $array,
+      static function (mixed $value): bool {
+        return is_float($value) === false;
+      }
+    );
+    if ($invalid !== []) {
+      throw new InvalidArgumentException('$array must only contain float values');
+    }
+
+    return new static(...$array);
+  }
 
   public function __construct(float ...$floats) {
     $this->data = $floats;

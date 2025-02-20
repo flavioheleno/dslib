@@ -4,12 +4,30 @@ declare(strict_types = 1);
 namespace DsLib\List;
 
 use DsLib\Contract\StringCollectionInterface;
+use InvalidArgumentException;
 
 class StringList implements StringCollectionInterface {
   /**
    * @var list<string>
    */
   protected array $data;
+
+  /**
+   * @param list<string> $array
+   */
+  public static function fromArray(array $array): static {
+    $invalid = array_filter(
+      $array,
+      static function (mixed $value): bool {
+        return is_string($value) === false;
+      }
+    );
+    if ($invalid !== []) {
+      throw new InvalidArgumentException('$array must only contain string values');
+    }
+
+    return new static(...$array);
+  }
 
   public function __construct(string ...$strings) {
     $this->data = $strings;
