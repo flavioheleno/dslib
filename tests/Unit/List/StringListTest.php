@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace DsLib\Test\Unit\List;
 
+use DsLib\Contract\StringFilterInterface;
+use DsLib\Contract\StringMapInterface;
 use DsLib\List\StringList;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -35,23 +37,39 @@ final class StringListTest extends TestCase {
   public function testAll(): void {
     $list = new StringList('b', 'c', 'd');
 
-    $this->assertTrue($list->all(static function (string $value): bool {
-      return strlen($value) === 1;
-    }));
-    $this->assertFalse($list->all(static function (string $value): bool {
-      return strlen($value) > 1;
-    }));
+    $this->assertTrue($list->all(
+      new class implements StringFilterInterface {
+        public function __invoke(string $value, int $index): bool {
+          return strlen($value) === 1;
+        }
+      }
+    ));
+    $this->assertFalse($list->all(
+      new class implements StringFilterInterface {
+        public function __invoke(string $value, int $index): bool {
+          return strlen($value) > 1;
+        }
+      }
+    ));
   }
 
   public function testAny(): void {
     $list = new StringList('b', 'd');
 
-    $this->assertTrue($list->any(static function (string $value): bool {
-      return $value === 'd';
-    }));
-    $this->assertFalse($list->any(static function (string $value): bool {
-      return strlen($value) > 1;
-    }));
+    $this->assertTrue($list->any(
+      new class implements StringFilterInterface {
+        public function __invoke(string $value, int $index): bool {
+          return $value === 'd';
+        }
+      }
+    ));
+    $this->assertFalse($list->any(
+      new class implements StringFilterInterface {
+        public function __invoke(string $value, int $index): bool {
+          return strlen($value) > 1;
+        }
+      }
+    ));
   }
 
   public function testClear(): void {
@@ -81,9 +99,13 @@ final class StringListTest extends TestCase {
   public function testFilter(): void {
     $list = new StringList('b', 'c', 'd', 'e');
 
-    $filtered = $list->filter(static function (string $value): bool {
-      return $value === 'c' || $value === 'e';
-    });
+    $filtered = $list->filter(
+      new class implements StringFilterInterface {
+        public function __invoke(string $value, int $index): bool {
+          return $value === 'c' || $value === 'e';
+        }
+      }
+    );
     $this->assertEquals(['c', 'e'], $filtered->toArray());
   }
 
@@ -114,9 +136,13 @@ final class StringListTest extends TestCase {
   public function testMap(): void {
     $list = new StringList('a', 'b', 'c');
 
-    $map = $list->map(static function (string $value): string {
-      return $value . '?';
-    });
+    $map = $list->map(
+      new class implements StringMapInterface {
+        public function __invoke(string $value): string {
+          return $value . '?';
+        }
+      }
+    );
 
     $this->assertEquals(['a?', 'b?', 'c?'], $map->toArray());
   }

@@ -12,26 +12,14 @@ interface IntCollectionInterface extends Countable, Iterator {
    */
   public static function fromArray(array $array): static;
   public function isEmpty(): bool;
-  /**
-   * @param callable(int,int):bool $callback
-   */
-  public function all(callable $callback): bool;
-  /**
-   * @param callable(int,int):bool $callback
-   */
-  public function any(callable $callback): bool;
+  public function all(IntFilterInterface $filter): bool;
+  public function any(IntFilterInterface $filter): bool;
   public function clear(): void;
   public function diff(IntCollectionInterface ...$collections): static;
-  /**
-   * @param callable(int):bool $callback
-   */
-  public function filter(callable $callback): static;
+  public function filter(IntFilterInterface $filter): static;
   public function has(int $value): bool;
   public function intersect(IntCollectionInterface ...$collections): static;
-  /**
-   * @param callable(int):bool $callback
-   */
-  public function map(callable $callback): static;
+  public function map(IntMapInterface $map): static;
   public function merge(IntCollectionInterface ...$collections): self;
   public function pop(): int;
   public function push(int $value): self;

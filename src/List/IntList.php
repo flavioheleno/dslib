@@ -4,6 +4,8 @@ declare(strict_types = 1);
 namespace DsLib\List;
 
 use DsLib\Contract\IntCollectionInterface;
+use DsLib\Contract\IntFilterInterface;
+use DsLib\Contract\IntMapInterface;
 use InvalidArgumentException;
 
 class IntList implements IntCollectionInterface {
@@ -38,19 +40,12 @@ class IntList implements IntCollectionInterface {
   }
 
   /** Array Methods **/
-
-  /**
-   * @param callable(int,int):bool $callback
-   */
-  public function all(callable $callback): bool {
-    return array_all($this->data, $callback);
+  public function all(IntFilterInterface $filter): bool {
+    return array_all($this->data, $filter);
   }
 
-  /**
-   * @param callable(int,int):bool $callback
-   */
-  public function any(callable $callback): bool {
-    return array_any($this->data, $callback);
+  public function any(IntFilterInterface $filter): bool {
+    return array_any($this->data, $filter);
   }
 
   public function clear(): void {
@@ -71,11 +66,8 @@ class IntList implements IntCollectionInterface {
     );
   }
 
-  /**
-   * @param callable(int):bool $callback
-   */
-  public function filter(callable $callback): static {
-    return new static(...array_filter($this->data, $callback));
+  public function filter(IntFilterInterface $filter): static {
+    return new static(...array_filter($this->data, $filter, ARRAY_FILTER_USE_BOTH));
   }
 
   public function has(int $value): bool {
@@ -96,11 +88,8 @@ class IntList implements IntCollectionInterface {
     );
   }
 
-  /**
-   * @param callable(int):bool $callback
-   */
-  public function map(callable $callback): static {
-    return new static(...array_map($callback, $this->data));
+  public function map(IntMapInterface $map): static {
+    return new static(...array_map($map, $this->data));
   }
 
   public function merge(IntCollectionInterface ...$collections): self {

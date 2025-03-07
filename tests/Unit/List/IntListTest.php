@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace DsLib\Test\Unit\List;
 
+use DsLib\Contract\IntFilterInterface;
+use DsLib\Contract\IntMapInterface;
 use DsLib\List\IntList;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -35,23 +37,39 @@ final class IntListTest extends TestCase {
   public function testAll(): void {
     $list = new IntList(1, 2, 3);
 
-    $this->assertTrue($list->all(static function (int $value): bool {
-      return $value > 0;
-    }));
-    $this->assertFalse($list->all(static function (int $value): bool {
-      return $value % 2 === 0;
-    }));
+    $this->assertTrue($list->all(
+      new class implements IntFilterInterface {
+        public function __invoke(int $value, int $index): bool {
+          return $value > 0;
+        }
+      }
+    ));
+    $this->assertFalse($list->all(
+      new class implements IntFilterInterface {
+        public function __invoke(int $value, int $index): bool {
+          return $value % 2 === 0;
+        }
+      }
+    ));
   }
 
   public function testAny(): void {
     $list = new IntList(1, 3);
 
-    $this->assertTrue($list->any(static function (int $value): bool {
-      return $value % 3 === 0;
-    }));
-    $this->assertFalse($list->any(static function (int $value): bool {
-      return $value % 2 === 0;
-    }));
+    $this->assertTrue($list->any(
+      new class implements IntFilterInterface {
+        public function __invoke(int $value, int $index): bool {
+          return $value % 3 === 0;
+        }
+      }
+    ));
+    $this->assertFalse($list->any(
+      new class implements IntFilterInterface {
+        public function __invoke(int $value, int $index): bool {
+          return $value % 2 === 0;
+        }
+      }
+    ));
   }
 
   public function testClear(): void {
@@ -81,9 +99,13 @@ final class IntListTest extends TestCase {
   public function testFilter(): void {
     $list = new IntList(1, 2, 3, 4);
 
-    $filtered = $list->filter(static function (int $value): bool {
-      return $value % 2 === 0;
-    });
+    $filtered = $list->filter(
+      new class implements IntFilterInterface {
+        public function __invoke(int $value, int $index): bool {
+          return $value % 2 === 0;
+        }
+      }
+    );
     $this->assertEquals([2, 4], $filtered->toArray());
   }
 
@@ -108,9 +130,13 @@ final class IntListTest extends TestCase {
   public function testMap(): void {
     $list = new IntList(0, 1, 2);
 
-    $map = $list->map(static function (int $value): int {
-      return $value * 2;
-    });
+    $map = $list->map(
+      new class implements IntMapInterface {
+        public function __invoke(int $value): int {
+          return $value * 2;
+        }
+      }
+    );
 
     $this->assertEquals([0, 2, 4], $map->toArray());
   }

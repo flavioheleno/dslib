@@ -4,6 +4,8 @@ declare(strict_types = 1);
 namespace DsLib\List;
 
 use DsLib\Contract\FloatCollectionInterface;
+use DsLib\Contract\FloatFilterInterface;
+use DsLib\Contract\FloatMapInterface;
 use InvalidArgumentException;
 
 class FloatList implements FloatCollectionInterface {
@@ -38,19 +40,12 @@ class FloatList implements FloatCollectionInterface {
   }
 
   /** Array Methods **/
-
-  /**
-   * @param callable(float,float):bool $callback
-   */
-  public function all(callable $callback): bool {
-    return array_all($this->data, $callback);
+  public function all(FloatFilterInterface $filter): bool {
+    return array_all($this->data, $filter);
   }
 
-  /**
-   * @param callable(float,float):bool $callback
-   */
-  public function any(callable $callback): bool {
-    return array_any($this->data, $callback);
+  public function any(FloatFilterInterface $filter): bool {
+    return array_any($this->data, $filter);
   }
 
   public function clear(): void {
@@ -71,11 +66,8 @@ class FloatList implements FloatCollectionInterface {
     );
   }
 
-  /**
-   * @param callable(float):bool $callback
-   */
-  public function filter(callable $callback): static {
-    return new static(...array_filter($this->data, $callback));
+  public function filter(FloatFilterInterface $filter): static {
+    return new static(...array_filter($this->data, $filter, ARRAY_FILTER_USE_BOTH));
   }
 
   public function has(float $value): bool {
@@ -96,11 +88,8 @@ class FloatList implements FloatCollectionInterface {
     );
   }
 
-  /**
-   * @param callable(float):bool $callback
-   */
-  public function map(callable $callback): static {
-    return new static(...array_map($callback, $this->data));
+  public function map(FloatMapInterface $map): static {
+    return new static(...array_map($map, $this->data));
   }
 
   public function merge(FloatCollectionInterface ...$collections): self {

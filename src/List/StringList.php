@@ -4,6 +4,8 @@ declare(strict_types = 1);
 namespace DsLib\List;
 
 use DsLib\Contract\StringCollectionInterface;
+use DsLib\Contract\StringFilterInterface;
+use DsLib\Contract\StringMapInterface;
 use InvalidArgumentException;
 
 class StringList implements StringCollectionInterface {
@@ -38,19 +40,12 @@ class StringList implements StringCollectionInterface {
   }
 
   /** Array Methods **/
-
-  /**
-   * @param callable(string,int):bool $callback
-   */
-  public function all(callable $callback): bool {
-    return array_all($this->data, $callback);
+  public function all(StringFilterInterface $filter): bool {
+    return array_all($this->data, $filter);
   }
 
-  /**
-   * @param callable(string,int):bool $callback
-   */
-  public function any(callable $callback): bool {
-    return array_any($this->data, $callback);
+  public function any(StringFilterInterface $filter): bool {
+    return array_any($this->data, $filter);
   }
 
   public function clear(): void {
@@ -71,11 +66,8 @@ class StringList implements StringCollectionInterface {
     );
   }
 
-  /**
-   * @param callable(string):bool $callback
-   */
-  public function filter(callable $callback): static {
-    return new static(...array_filter($this->data, $callback));
+  public function filter(StringFilterInterface $filter): static {
+    return new static(...array_filter($this->data, $filter, ARRAY_FILTER_USE_BOTH));
   }
 
   public function has(string $value): bool {
@@ -100,11 +92,8 @@ class StringList implements StringCollectionInterface {
     return implode($separator, $this->data);
   }
 
-  /**
-   * @param callable(int):bool $callback
-   */
-  public function map(callable $callback): static {
-    return new static(...array_map($callback, $this->data));
+  public function map(StringMapInterface $map): static {
+    return new static(...array_map($map, $this->data));
   }
 
   public function merge(StringCollectionInterface ...$collections): self {

@@ -12,26 +12,14 @@ interface FloatCollectionInterface extends Countable, Iterator {
    */
   public static function fromArray(array $array): static;
   public function isEmpty(): bool;
-  /**
-   * @param callable(float,float):bool $callback
-   */
-  public function all(callable $callback): bool;
-  /**
-   * @param callable(float,float):bool $callback
-   */
-  public function any(callable $callback): bool;
+  public function all(FloatFilterInterface $filter): bool;
+  public function any(FloatFilterInterface $filter): bool;
   public function clear(): void;
   public function diff(FloatCollectionInterface ...$collections): static;
-  /**
-   * @param callable(float):bool $callback
-   */
-  public function filter(callable $callback): static;
+  public function filter(FloatFilterInterface $filter): static;
   public function has(float $value): bool;
   public function intersect(FloatCollectionInterface ...$collections): static;
-  /**
-   * @param callable(float):bool $callback
-   */
-  public function map(callable $callback): static;
+  public function map(FloatMapInterface $map): static;
   public function merge(FloatCollectionInterface ...$collections): self;
   public function pop(): float;
   public function push(float $value): self;

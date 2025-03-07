@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace DsLib\Test\Unit\List;
 
+use DsLib\Contract\FloatFilterInterface;
+use DsLib\Contract\FloatMapInterface;
 use DsLib\List\FloatList;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -35,23 +37,39 @@ final class FloatListTest extends TestCase {
   public function testAll(): void {
     $list = new FloatList(0.1, 0.2, 0.3);
 
-    $this->assertTrue($list->all(static function (float $value): bool {
-      return $value > 0;
-    }));
-    $this->assertFalse($list->all(static function (float $value): bool {
-      return $value < 0.2;
-    }));
+    $this->assertTrue($list->all(
+      new class implements FloatFilterInterface {
+        public function __invoke(float $value, int $index): bool {
+          return $value > 0;
+        }
+      }
+    ));
+    $this->assertFalse($list->all(
+      new class implements FloatFilterInterface {
+        public function __invoke(float $value, int $index): bool {
+          return $value < 0.2;
+        }
+      }
+    ));
   }
 
   public function testAny(): void {
     $list = new FloatList(0.1, 0.3);
 
-    $this->assertTrue($list->any(static function (float $value): bool {
-      return $value > 0.2;
-    }));
-    $this->assertFalse($list->any(static function (float $value): bool {
-      return $value < 0.1;
-    }));
+    $this->assertTrue($list->any(
+      new class implements FloatFilterInterface {
+        public function __invoke(float $value, int $index): bool {
+          return $value > 0.2;
+        }
+      }
+    ));
+    $this->assertFalse($list->any(
+      new class implements FloatFilterInterface {
+        public function __invoke(float $value, int $index): bool {
+          return $value < 0.1;
+        }
+      }
+    ));
   }
 
   public function testClear(): void {
@@ -81,9 +99,13 @@ final class FloatListTest extends TestCase {
   public function testFilter(): void {
     $list = new FloatList(-0.1, -0.2, 0.3, 0.4);
 
-    $filtered = $list->filter(static function (float $value): bool {
-      return $value > 0;
-    });
+    $filtered = $list->filter(
+      new class implements FloatFilterInterface {
+        public function __invoke(float $value, int $index): bool {
+          return $value > 0;
+        }
+      }
+    );
     $this->assertEquals([0.3, 0.4], $filtered->toArray());
   }
 
@@ -108,9 +130,13 @@ final class FloatListTest extends TestCase {
   public function testMap(): void {
     $list = new FloatList(0.0, 0.1, 0.2);
 
-    $map = $list->map(static function (float $value): float {
-      return $value * 2;
-    });
+    $map = $list->map(
+      new class implements FloatMapInterface {
+        public function __invoke(float $value): float {
+          return $value * 2;
+        }
+      }
+    );
 
     $this->assertEquals([0.0, 0.2, 0.4], $map->toArray());
   }

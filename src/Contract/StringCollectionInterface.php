@@ -12,27 +12,15 @@ interface StringCollectionInterface extends Countable, Iterator {
    */
   public static function fromArray(array $array): static;
   public function isEmpty(): bool;
-  /**
-   * @param callable(string,int):bool $callback
-   */
-  public function all(callable $callback): bool;
-  /**
-   * @param callable(string,int):bool $callback
-   */
-  public function any(callable $callback): bool;
+  public function all(StringFilterInterface $filter): bool;
+  public function any(StringFilterInterface $filter): bool;
   public function clear(): void;
   public function diff(StringCollectionInterface ...$collections): static;
-  /**
-   * @param callable(string):bool $callback
-   */
-  public function filter(callable $callback): static;
+  public function filter(StringFilterInterface $filter): static;
   public function has(string $value): bool;
   public function intersect(StringCollectionInterface ...$collections): static;
   public function join(string $separator): string;
-  /**
-   * @param callable(int):bool $callback
-   */
-  public function map(callable $callback): static;
+  public function map(StringMapInterface $map): static;
   public function merge(StringCollectionInterface ...$collections): self;
   public function pop(): string;
   public function push(string $value): self;
